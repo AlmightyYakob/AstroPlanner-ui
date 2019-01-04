@@ -8,16 +8,19 @@ const localizer = BigCalendar.momentLocalizer(moment)
 
 class Calendar extends Component {
   render() {
+    console.log(moment.unix(1546639200).toDate())
     return (
       <div className="Calendar">
         <header className="App-header">
           <BigCalendar
             localizer={localizer}
-            events={[]}
+            events={[{
+              start: moment.unix(1546639200).toDate(),
+              end: moment.unix(1546642800).toDate(),
+            }]}
             defaultView={'day'}
             toolbar={false}
-            width={'1000px'}
-            step={60}
+            width={1000}
           />
         </header>
       </div>
