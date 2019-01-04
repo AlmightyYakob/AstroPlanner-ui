@@ -1,3 +1,9 @@
+# AstroPlanner-ui
+
+The front end component for [AstroPlanner](https://github.com/AlmightyYakob/AstroPlanner)
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
