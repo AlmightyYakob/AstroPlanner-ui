@@ -4,10 +4,42 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './Calendar.css'
 
-const localizer = BigCalendar.momentLocalizer(moment)
+moment.locale('en', {
+  week: {
+    dow: moment().day(),
+  },
+});
+const localizer = BigCalendar.momentLocalizer(moment);
+
+const API_URL = 'https://jakenesbitt.com/astroplanner/api/';
 
 class Calendar extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  componentDidMount() {
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          ...this.state,
+          data,
+        });
+      });
+  }
+
+  // componentWillUpdate(newProps, newState){
+  //   this.setState({
+  //     ...this.state,
+  //     events: this.state.data.daily.
+  //   });
+  // }
+
   render() {
+    console.log(this.state.data);
     return (
       <div className="calendar-container">
         <BigCalendar
@@ -18,7 +50,6 @@ class Calendar extends Component {
           }]}
           defaultView={'week'}
           views={['week', 'day']}
-          // width={1000}
           steps={60}
         />
       </div>
