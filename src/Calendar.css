@@ -7,3 +7,24 @@
   border: 2px solid coral;
   border-radius: 10px;
 }
+
+.inviable {
+  /* background: repeating-linear-gradient(
+    45deg,
+    #6b6b6b,
+    #6b6b6b 5px,
+    #3f3f3f 5px,
+    #3f3f3f 10px
+  ); */
+
+  background-color: lightgray;
+  border-color: lightgray !important;
+}
+
+.rbc-day-slot .rbc-events-container {
+  margin: 0;
+}
+
+.rbc-event-label {
+  display: none;
+}

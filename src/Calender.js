@@ -10,48 +10,79 @@ moment.locale('en', {
   },
 });
 const localizer = BigCalendar.momentLocalizer(moment);
-
 const API_URL = 'https://jakenesbitt.com/astroplanner/api/';
+const ONE_HOUR_SECONDS = 3600;
 
 class Calendar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      data: [],
+      events: [],
+    };
   }
+
+  determineColorClass = (event) => {
+    const config = {
+      style: {
+        textAlign: 'center',
+      },
+    };
+
+    const maxHue = 120;
+    const color = `hsl(${event.viability * maxHue}, 60%, 45%)`;
+
+    if (event.viability === 0) {
+      config.className = 'inviable';
+    }
+    else {
+      config.style = {
+        ...config.style,
+        backgroundColor: color,
+        borderColor: color,
+      };
+    }
+    return config;
+  }
+
+  // showEventToolTip = (event) => (
+  //   // some shit
+  // );
 
   componentDidMount() {
     fetch(API_URL)
       .then(res => res.json())
       .then(data => {
+        const hours = data.daily.data.map(x => x.hours).flat();
         this.setState({
           ...this.state,
-          data,
+          data: {
+            currently: data.currently,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            timezone: data.timezone,
+          },
+          events: hours.map(x => ({
+            start: moment.unix(x.time).toDate(),
+            end: moment.unix(x.time + ONE_HOUR_SECONDS - 1).toDate(),
+            viability: x.viability,
+            title: x.viability === 0 ? "" : `Viability: ${(x.viability * 100).toFixed()}%`,
+          })),
         });
       });
   }
 
-  componentWillUpdate(newProps, newState){
-    console.log(newState.data.daily.data.map(x => x.hours).flat());
-  //   this.setState({
-  //     ...this.state,
-  //     events: stuff
-  //   });
-  }
-
   render() {
-    // console.log(this.state.data);
     return (
       <div className="calendar-container">
         <BigCalendar
           localizer={localizer}
-          events={[{
-            start: moment.unix(1546639200).toDate(),
-            end: moment.unix(1546642800).toDate(),
-          }]}
+          events={this.state.events}
           defaultView={'week'}
           views={['week', 'day']}
-          steps={60}
+          eventPropGetter={this.determineColorClass}
+          // tooltipAccessor={this.showEventToolTip}
         />
       </div>
     );
