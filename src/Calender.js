@@ -31,15 +31,16 @@ class Calendar extends Component {
       });
   }
 
-  // componentWillUpdate(newProps, newState){
+  componentWillUpdate(newProps, newState){
+    console.log(newState.data.daily.data.map(x => x.hours).flat());
   //   this.setState({
   //     ...this.state,
-  //     events: this.state.data.daily.
+  //     events: stuff
   //   });
-  // }
+  }
 
   render() {
-    console.log(this.state.data);
+    // console.log(this.state.data);
     return (
       <div className="calendar-container">
         <BigCalendar
