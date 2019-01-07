@@ -3,14 +3,15 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './Calendar.css'
+import Axios from 'axios';
 
-moment.locale('en', {
+moment.updateLocale('en', {
   week: {
     dow: moment().day(),
   },
 });
 const localizer = BigCalendar.momentLocalizer(moment);
-const API_URL = 'https://jakenesbitt.com/astroplanner/api/';
+const BACKEND_API_URL = 'https://jakenesbitt.com/astroplanner/api/';
 const ONE_HOUR_SECONDS = 3600;
 
 class Calendar extends Component {
@@ -46,16 +47,22 @@ class Calendar extends Component {
     return config;
   }
 
-  // showEventToolTip = (event) => (
-  //   // some shit
-  // );
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    console.log(prevState);
+    if (nextProps.lat === null || nextProps.lng === null) return prevState;
 
-  componentDidMount() {
-    fetch(API_URL)
+    Axios.get(BACKEND_API_URL, {
+      params: {
+        lat: nextProps.lat,
+        lng: nextProps.lng,
+      },
+    })
       .then(res => res.json())
       .then(data => {
+        console.log(data);
+        if (data.status !== "OK") throw data;
         const hours = data.daily.data.map(x => x.hours).flat();
-        this.setState({
+        return {
           ...this.state,
           data: {
             currently: data.currently,
@@ -69,7 +76,11 @@ class Calendar extends Component {
             viability: x.viability,
             title: x.viability === 0 ? "" : `Viability: ${(x.viability * 100).toFixed()}%`,
           })),
-        });
+        };
+      })
+      .catch(err => {
+        console.error("API Error:", err.error);
+        return prevState;
       });
   }
 
