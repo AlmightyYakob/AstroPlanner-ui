@@ -22,12 +22,18 @@ class LocationSelector extends Component {
         };
     }
 
-    componentDidUpdate = () => {
-        this.props.onChange !== undefined && this.props.onChange(this.state);
-    }
+    componentDidUpdate = (_, prevState) => {
+        if (prevState !== this.state) {
+            console.log("update");
+            (this.props.onLocationSelect !== undefined)
+                && this.state.lat !== null
+                && this.state.lng !== null
+                && this.props.onLocationSelect(this.state);
+        }
+    };
 
     renderFunc = ({ getInputProps, getSuggestionItemProps, suggestions, loading }) => {
-        if (suggestions.length > 0) console.log(getSuggestionItemProps(suggestions[0]));
+        // if (suggestions.length > 0) console.log(getSuggestionItemProps(suggestions[0]));
         return (
             <div className="autocomplete-root">
                 <Input {...getInputProps()} />
@@ -48,7 +54,7 @@ class LocationSelector extends Component {
                     </ListGroup>
                 </div>
             </div>
-        )
+        );
     };
 
     handleChange = address => {
@@ -74,14 +80,16 @@ class LocationSelector extends Component {
 
     handleError = err => {
         console.log(err);
-    }
+    };
 
     render() {
         return (
             <div className="location-selector-container">
-                <h1>HEYY</h1>
+                <h1>AstroPlanner</h1>
+                <label>Select Location</label>
                 <PlacesAutocomplete
                     value={this.state.address}
+                    onLocationSelect={this.handleChange}
                     onChange={this.handleChange}
                     onSelect={this.handleSelect}
                     onError={this.handleError}

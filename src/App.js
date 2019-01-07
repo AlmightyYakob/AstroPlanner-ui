@@ -22,41 +22,14 @@ class App extends Component {
     };
   }
 
-  componentDidMount = () => {
-    // fetch(BACKEND_API_URL)
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     if (data.status !== "OK") throw data;
-    //     const hours = data.daily.data.map(x => x.hours).flat();
-    //     this.setState({
-    //       ...this.state,
-    //       data: {
-    //         currently: data.currently,
-    //         latitude: data.latitude,
-    //         longitude: data.longitude,
-    //         timezone: data.timezone,
-    //       },
-    //       events: hours.map(x => ({
-    //         start: moment.unix(x.time).toDate(),
-    //         end: moment.unix(x.time + ONE_HOUR_SECONDS - 1).toDate(),
-    //         viability: x.viability,
-    //         title: x.viability === 0 ? "" : `Viability: ${(x.viability * 100).toFixed()}%`,
-    //       })),
-    //     });
-    //   })
-    //   .catch(err => {
-    //     console.error("API Error:", err.error);
-    //   });
-  }
+  handleLocationSelect = (params) => {
+    console.log('handle select', params);
 
-  onLocationSet = (params) => {
-    console.log(params);
-
-    // this.setState({
-    //   ...this.state,
-    //   lat,
-    //   lng,
-    // });
+    this.setState({
+      ...this.state,
+      lat: params.lat,
+      lng: params.lng,
+    });
   }
 
   render() {
@@ -65,9 +38,12 @@ class App extends Component {
         <script type="text/javascript" src={GOOGLE_API_PATH}></script>
         <div className="main">
           <LocationSelector
-            // onChange={(params) => {this.set}}
+            onLocationSelect={this.handleLocationSelect}
           />
-          <Calendar />
+          <Calendar
+            lat={this.state.lat}
+            lng={this.state.lng}
+          />
         </div>
       </div>
     );

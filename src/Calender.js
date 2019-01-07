@@ -47,23 +47,24 @@ class Calendar extends Component {
     return config;
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    console.log(prevState);
-    if (nextProps.lat === null || nextProps.lng === null) return prevState;
+  componentDidUpdate = (prevProps) => {
+    console.log("COMPONENT UPDATE");
+    if (this.props.lat === null || this.props.lng === null) return;
+    if (this.props === prevProps) return;
 
     Axios.get(BACKEND_API_URL, {
       params: {
-        lat: nextProps.lat,
-        lng: nextProps.lng,
+        lat: this.props.lat,
+        lng: this.props.lng,
       },
     })
-      .then(res => res.json())
+      .then(res => res.data)
       .then(data => {
-        console.log(data);
+        console.log("+++", data);
         if (data.status !== "OK") throw data;
-        const hours = data.daily.data.map(x => x.hours).flat();
-        return {
-          ...this.state,
+        const hours = data.hourly.data;
+        this.setState({
+          ...this.props,
           data: {
             currently: data.currently,
             latitude: data.latitude,
@@ -76,13 +77,50 @@ class Calendar extends Component {
             viability: x.viability,
             title: x.viability === 0 ? "" : `Viability: ${(x.viability * 100).toFixed()}%`,
           })),
-        };
+        });
       })
       .catch(err => {
-        console.error("API Error:", err.error);
-        return prevState;
+        console.error("API Error:", err);
       });
-  }
+  };
+
+  // static getDerivedStateFromProps = (nextProps, prevState) => {
+  //   console.log('--', prevState);
+  //   if (nextProps.lat === null || nextProps.lng === null) return prevState;
+
+  //   Axios.get(BACKEND_API_URL, {
+  //     params: {
+  //       lat: nextProps.lat,
+  //       lng: nextProps.lng,
+  //     },
+  //   })
+  //     .then(res => res.data)
+  //     .then(data => {
+  //       console.log("+++", data);
+  //       if (data.status !== "OK") throw data;
+  //       // const hours = data.daily.data.map(x => x.hours).flat();
+  //       const hours = data.hourly.data;
+  //       return {
+  //         ...prevState,
+  //         data: {
+  //           currently: data.currently,
+  //           latitude: data.latitude,
+  //           longitude: data.longitude,
+  //           timezone: data.timezone,
+  //         },
+  //         events: hours.map(x => ({
+  //           start: moment.unix(x.time).toDate(),
+  //           end: moment.unix(x.time + ONE_HOUR_SECONDS - 1).toDate(),
+  //           viability: x.viability,
+  //           title: x.viability === 0 ? "" : `Viability: ${(x.viability * 100).toFixed()}%`,
+  //         })),
+  //       };
+  //     })
+  //     .catch(err => {
+  //       console.error("API Error:", err);
+  //       return prevState;
+  //     });
+  // }
 
   render() {
     return (
@@ -93,7 +131,7 @@ class Calendar extends Component {
           defaultView={'week'}
           views={['week', 'day']}
           eventPropGetter={this.determineColorClass}
-          // tooltipAccessor={this.showEventToolTip}
+        // tooltipAccessor={this.showEventToolTip}
         />
       </div>
     );
