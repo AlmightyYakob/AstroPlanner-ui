@@ -6,12 +6,6 @@ import LocationSelector from '../LocationSelector';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-// const BACKEND_API_URL = 'https://jakenesbitt.com/astroplanner/api/';
-// const ONE_HOUR_SECONDS = 3600;
-
-const GOOGLE_API_KEY = 'AIzaSyBqHbbTpxtq7dwr-3XtxSGLPgvIqLq7RmM';
-const GOOGLE_API_PATH = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&libraries=places`;
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +29,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <script type="text/javascript" src={GOOGLE_API_PATH}></script>
         <div className="main">
           <LocationSelector
             onLocationSelect={this.handleLocationSelect}
