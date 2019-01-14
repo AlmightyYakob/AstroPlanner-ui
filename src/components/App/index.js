@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import Calendar from './Calender';
-import moment from 'moment';
+import Calendar from '../Calendar';
+// import moment from 'moment';
 
-import LocationSelector from './LocationSelector';
+import LocationSelector from '../LocationSelector';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-const BACKEND_API_URL = 'https://jakenesbitt.com/astroplanner/api/';
-const ONE_HOUR_SECONDS = 3600;
+// const BACKEND_API_URL = 'https://jakenesbitt.com/astroplanner/api/';
+// const ONE_HOUR_SECONDS = 3600;
 
 const GOOGLE_API_KEY = 'AIzaSyBqHbbTpxtq7dwr-3XtxSGLPgvIqLq7RmM';
 const GOOGLE_API_PATH = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&libraries=places`;

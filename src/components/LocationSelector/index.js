@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Calendar from './Calender';
-import moment from 'moment';
+// import Calendar from '../Calendar';
+// import moment from 'moment';
 import { ListGroup, ListGroupItem, Input } from 'reactstrap';
 
 import PlacesAutocomplete, {
     geocodeByAddress,
-    geocodeByPlaceId,
     getLatLng,
+    // geocodeByPlaceId,
 } from 'react-places-autocomplete';
 
 import './LocationSelector.css';
