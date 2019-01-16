@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
+import { connect } from 'react-redux'
+import Axios from 'axios';
+
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './Calendar.css'
-import Axios from 'axios';
 
 moment.updateLocale('en', {
   week: {
@@ -48,7 +50,6 @@ class Calendar extends Component {
   }
 
   componentDidUpdate = (prevProps) => {
-    console.log("COMPONENT UPDATE");
     if (this.props.lat === null || this.props.lng === null) return;
     if (this.props === prevProps) return;
 
@@ -60,7 +61,6 @@ class Calendar extends Component {
     })
       .then(res => res.data)
       .then(data => {
-        console.log("+++", data);
         if (data.status !== "OK") throw data;
         const hours = data.hourly.data;
         this.setState({
@@ -138,4 +138,16 @@ class Calendar extends Component {
   }
 }
 
-export default Calendar;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    ...ownProps,
+    lat: state.location.lat,
+    lng: state.location.lng,
+  }
+}
+
+const CalendarContainer = connect(
+  mapStateToProps,
+)(Calendar)
+
+export default CalendarContainer;

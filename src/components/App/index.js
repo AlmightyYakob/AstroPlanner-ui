@@ -17,8 +17,6 @@ class App extends Component {
   }
 
   handleLocationSelect = (params) => {
-    console.log('handle select', params);
-
     this.setState({
       ...this.state,
       lat: params.lat,
@@ -30,13 +28,8 @@ class App extends Component {
     return (
       <div className="App">
         <div className="main">
-          <LocationSelector
-            onLocationSelect={this.handleLocationSelect}
-          />
-          <Calendar
-            lat={this.state.lat}
-            lng={this.state.lng}
-          />
+          <LocationSelector />
+          <Calendar />
         </div>
       </div>
     );

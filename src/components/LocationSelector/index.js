@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-// import Calendar from '../Calendar';
-// import moment from 'moment';
 import { ListGroup, ListGroupItem, Input } from 'reactstrap';
-
+import { connect } from 'react-redux'
 import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
-    // geocodeByPlaceId,
 } from 'react-places-autocomplete';
 
+import { selectLocation } from '../../actions/creators';
 import './LocationSelector.css';
 
 class LocationSelector extends Component {
@@ -16,21 +14,19 @@ class LocationSelector extends Component {
         super(props);
 
         this.state = {
-            address: '',
-            lat: null,
-            lng: null,
+            address: null,
         };
     }
 
-    componentDidUpdate = (_, prevState) => {
-        if (prevState !== this.state) {
-            console.log("update");
-            (this.props.onLocationSelect !== undefined)
-                && this.state.lat !== null
-                && this.state.lng !== null
-                && this.props.onLocationSelect(this.state);
-        }
-    };
+    // componentDidUpdate = (_, prevState) => {
+    //     if (prevState !== this.state) {
+    //         console.log("update");
+    //         (this.props.onLocationSelect !== undefined)
+    //             && this.state.lat !== null
+    //             && this.state.lng !== null
+    //             && this.props.onLocationSelect(this.state);
+    //     }
+    // };
 
     renderFunc = ({ getInputProps, getSuggestionItemProps, suggestions, loading }) => {
         // if (suggestions.length > 0) console.log(getSuggestionItemProps(suggestions[0]));
@@ -60,19 +56,31 @@ class LocationSelector extends Component {
     handleChange = address => {
         this.setState({
             ...this.state,
-            address,
+            address: address,
         });
     };
 
     handleSelect = address => {
+        // Quickly set address in state to the returned value,
+        // until the result from the call below, then dispatch action.
+        this.setState({
+            ...this.state,
+            address,
+        });
+
         geocodeByAddress(address)
             .then(results => getLatLng(results[0]))
-            .then(({ lat, lng }) => {
+            .then((loc) => {
+                // Dispatch action
+                this.props.setLocation({
+                    ...loc,
+                    address,
+                });
+
+                // Set local state back to null, so it uses the props
                 this.setState({
                     ...this.state,
-                    address,
-                    lat,
-                    lng,
+                    address: null,
                 });
             })
             .catch(error => console.error('Error', error));
@@ -88,8 +96,7 @@ class LocationSelector extends Component {
                 <h1>AstroPlanner</h1>
                 <label>Select Location</label>
                 <PlacesAutocomplete
-                    value={this.state.address}
-                    onLocationSelect={this.handleChange}
+                    value={this.state.address === null ? this.props.address : this.state.address}
                     onChange={this.handleChange}
                     onSelect={this.handleSelect}
                     onError={this.handleError}
@@ -101,4 +108,23 @@ class LocationSelector extends Component {
     }
 }
 
-export default LocationSelector;
+const mapStateToProps = (state) => {
+    return {
+        ...state.location,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        setLocation: (loc) => {
+            dispatch(selectLocation(loc))
+        }
+    }
+};
+
+const LocationSelectorContainer = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(LocationSelector)
+
+export default LocationSelectorContainer;
