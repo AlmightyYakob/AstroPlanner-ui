@@ -131,7 +131,6 @@ class Calendar extends Component {
           defaultView={'week'}
           views={['week', 'day']}
           eventPropGetter={this.determineColorClass}
-        // tooltipAccessor={this.showEventToolTip}
         />
       </div>
     );

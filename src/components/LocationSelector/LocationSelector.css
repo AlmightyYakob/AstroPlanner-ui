@@ -1,10 +1,9 @@
 .location-selector-container {
-    margin: 0 auto;
+    /* margin: 0 auto; */
     text-align: center;
 }
 
 .autocomplete-root {
     width: 30em;
     margin: 0 auto;
-
 }

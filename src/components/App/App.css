@@ -1,3 +1,10 @@
-/* .App {
-    
-} */
+.App {
+    text-align: center;
+}
+
+.location-selector-row {
+    text-align: center;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}

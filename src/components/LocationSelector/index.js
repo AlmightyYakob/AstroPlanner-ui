@@ -93,7 +93,6 @@ class LocationSelector extends Component {
     render() {
         return (
             <div className="location-selector-container">
-                <h1>AstroPlanner</h1>
                 <label>Select Location</label>
                 <PlacesAutocomplete
                     value={this.state.address === null ? this.props.address : this.state.address}
