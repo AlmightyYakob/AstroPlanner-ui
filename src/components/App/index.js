@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { MyLocation } from 'styled-icons/material';
 import styled from 'styled-components';
 import { clamp } from 'lodash';
+import Geocode from 'react-geocode';
 
 import Calendar from '../Calendar';
 import GeoLocateButton from '../GeoLocateButton';
@@ -42,6 +42,23 @@ class App extends Component {
   //   window.removeEventListener("resize");
   // }
 
+  handleGeoLocationButtonClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(x => {
+        console.log(x);
+        // Call Geocode, then update redux state
+      }, y => {
+        console.log("ERROR")
+      },
+        {
+          enableHighAccuracy: true,
+        });
+    }
+    else {
+      console.log("no geolocate available.");
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -49,19 +66,14 @@ class App extends Component {
           <h1 className="main-title">AstroPlanner</h1>
           <div className="location-selector-row">
             <GeoLocateButton
-              onClick={() => { console.log('cklia') }}
-            >
-              <MyLocation
-                // size={60}
-                width={30}
-                height={30}
-              />
-            </GeoLocateButton>
+              onClick={this.handleGeoLocationButtonClick}
+              size={30}
+            />
             <LocationSelector />
           </div>
           <Calendar className="calendar" />
         </GridContainer>
-      </div>
+      </div >
     );
   }
 }

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { MyLocation } from 'styled-icons/material';
+// import { MyLocation } from 'styled-icons/material';
+import { LocationArrow } from 'styled-icons/fa-solid';
 
 
 const Button = styled.button`
-  color: red;
+  color: skyblue;
+  background-color: unset;
   cursor: pointer;
   border-radius: 5px;
   border: white;
@@ -26,8 +28,8 @@ class GeoLocateButton extends Component {
         <Button
           {...this.props}
         >
-          <MyLocation
-            size={48}
+          <LocationArrow
+            size={this.props.size}
           />
         </Button>
       </div>

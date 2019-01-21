@@ -53,6 +53,7 @@ class LocationSelector extends Component {
   handleSelect = address => {
     // Quickly set address in state to the returned value,
     // until the result from the call below, then dispatch action.
+    
     this.setState({
       ...this.state,
       address,
@@ -88,6 +89,7 @@ class LocationSelector extends Component {
           onChange={this.handleChange}
           onSelect={this.handleSelect}
           onError={this.handleError}
+          highlightFirstSuggestion={true}
         >
           {this.renderFunc}
         </PlacesAutocomplete>
