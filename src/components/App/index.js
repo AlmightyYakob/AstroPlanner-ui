@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
-import Calendar from '../Calendar';
-import styled from 'styled-components';
 import { MyLocation } from 'styled-icons/material';
-// import { Button } from 'reactstrap';
-// import moment from 'moment';
+import styled from 'styled-components';
+import { clamp } from 'lodash';
 
+import Calendar from '../Calendar';
+import GeoLocateButton from '../GeoLocateButton';
 import LocationSelector from '../LocationSelector';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
-const GeoLocateButton = styled.button`
-  color: red;
-  cursor: pointer;
-  border-radius: 5px;
-  border: white;
+// ADD FIX FOR WHEN WINDOW RESIZED LIVE
+const calcSideColWidth = x => clamp((20) * (x - 1080) / (840), 0, 20);
+const GridContainer = styled.div`
+    display: grid;
+    /* grid-template-columns: 20% auto 20%; */
+    grid-template-columns: ${calcSideColWidth(window.innerWidth)}% auto ${calcSideColWidth(window.innerWidth)}%;
+    grid-template-rows: auto auto auto;
 `;
 
 class App extends Component {
@@ -22,34 +23,44 @@ class App extends Component {
     super(props);
 
     this.state = {
-      lat: null,
-      lng: null,
+      width: window.innerWidth,
+      height: window.innerHeight,
     };
   }
 
-  handleLocationSelect = (params) => {
-    this.setState({
-      ...this.state,
-      lat: params.lat,
-      lng: params.lng,
-    });
-  }
+  // componentDidMount(){
+  //   window.addEventListener("resize", () => {
+  //     console.log("resize");
+  //     this.setState({
+  //       width: window.innerWidth,
+  //       height: window.innerHeight,
+  //     });
+  //   });
+  // }
+
+  // componentWillUnmount(){
+  //   window.removeEventListener("resize");
+  // }
 
   render() {
     return (
       <div className="App">
-        <h1>AstroPlanner</h1>
-        <div className="location-selector-row">
-          <GeoLocateButton
-            onClick={() => { console.log('cklia') }}
-          >
-            <MyLocation
-              size={48}
-            />
-          </GeoLocateButton>
-          <LocationSelector />
-        </div>
-        <Calendar />
+        <GridContainer className="grid-container">
+          <h1 className="main-title">AstroPlanner</h1>
+          <div className="location-selector-row">
+            <GeoLocateButton
+              onClick={() => { console.log('cklia') }}
+            >
+              <MyLocation
+                // size={60}
+                width={30}
+                height={30}
+              />
+            </GeoLocateButton>
+            <LocationSelector />
+          </div>
+          <Calendar className="calendar" />
+        </GridContainer>
       </div>
     );
   }

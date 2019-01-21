@@ -84,48 +84,11 @@ class Calendar extends Component {
       });
   };
 
-  // static getDerivedStateFromProps = (nextProps, prevState) => {
-  //   console.log('--', prevState);
-  //   if (nextProps.lat === null || nextProps.lng === null) return prevState;
-
-  //   Axios.get(BACKEND_API_URL, {
-  //     params: {
-  //       lat: nextProps.lat,
-  //       lng: nextProps.lng,
-  //     },
-  //   })
-  //     .then(res => res.data)
-  //     .then(data => {
-  //       console.log("+++", data);
-  //       if (data.status !== "OK") throw data;
-  //       // const hours = data.daily.data.map(x => x.hours).flat();
-  //       const hours = data.hourly.data;
-  //       return {
-  //         ...prevState,
-  //         data: {
-  //           currently: data.currently,
-  //           latitude: data.latitude,
-  //           longitude: data.longitude,
-  //           timezone: data.timezone,
-  //         },
-  //         events: hours.map(x => ({
-  //           start: moment.unix(x.time).toDate(),
-  //           end: moment.unix(x.time + ONE_HOUR_SECONDS - 1).toDate(),
-  //           viability: x.viability,
-  //           title: x.viability === 0 ? "" : `Viability: ${(x.viability * 100).toFixed()}%`,
-  //         })),
-  //       };
-  //     })
-  //     .catch(err => {
-  //       console.error("API Error:", err);
-  //       return prevState;
-  //     });
-  // }
-
   render() {
     return (
-      <div className="calendar-container">
+      <div className={this.props.className || "calendar-container"}>
         <BigCalendar
+          className="main-astro-calendar"
           localizer={localizer}
           events={this.state.events}
           defaultView={'week'}
