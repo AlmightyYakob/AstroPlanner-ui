@@ -104,7 +104,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     setLocation: (loc) => {
       dispatch(selectLocation(loc))

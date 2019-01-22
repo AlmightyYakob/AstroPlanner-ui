@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { clamp } from 'lodash';
 import Geocode from 'react-geocode';
@@ -6,6 +7,8 @@ import Geocode from 'react-geocode';
 import Calendar from '../Calendar';
 import GeoLocateButton from '../GeoLocateButton';
 import LocationSelector from '../LocationSelector';
+import { selectLocation } from '../../actions/creators';
+
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -44,18 +47,41 @@ class App extends Component {
 
   handleGeoLocationButtonClick = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(x => {
-        console.log(x);
+      navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
+        console.log(latitude, longitude);
         // Call Geocode, then update redux state
-      }, y => {
-        console.log("ERROR")
+
+        Geocode.fromLatLng(`${latitude}`, `${longitude}`)
+          .then(res => {
+            // Update state with lat/lng and address
+            this.props.setLocation({
+              address: res.results[0].formatted_address,
+              lat: latitude,
+              lng: longitude
+            });
+            console.log(res);
+
+          }, error => {
+            // Just update state with lat and lng
+            console.log(error);
+            this.props.setLocation({
+              lat: latitude,
+              lng: longitude
+            });
+          });
+
+
+      }, error => {
+        // Couldn't obtain position
+        console.log(error.message);
       },
-        {
-          enableHighAccuracy: true,
-        });
+        // {
+        //   enableHighAccuracy: true,
+        // }
+      );
     }
     else {
-      console.log("no geolocate available.");
+      console.log("Geolocation not supported.");
     }
   }
 
@@ -78,4 +104,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLocation: (loc) => {
+      dispatch(selectLocation(loc));
+    }
+  }
+};
+
+const ConnectedApp = connect(
+  null,
+  mapDispatchToProps,
+)(App);
+
+export default ConnectedApp;

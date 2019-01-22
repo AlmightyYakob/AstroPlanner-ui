@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // import { MyLocation } from 'styled-icons/material';
-import { LocationArrow } from 'styled-icons/fa-solid';
+// import { LocationArrow } from 'styled-icons/fa-solid';
+import { SearchLocation } from 'styled-icons/fa-solid';
 
 
 const Button = styled.button`
-  color: skyblue;
+  color: dodgerblue;
   background-color: unset;
   cursor: pointer;
-  border-radius: 5px;
-  border: white;
+  border-color: transparent;
+  /* border-radius: 5px; */
+  /* border-width: 2px; */
 `;
 
 class GeoLocateButton extends Component {
@@ -28,7 +30,7 @@ class GeoLocateButton extends Component {
         <Button
           {...this.props}
         >
-          <LocationArrow
+          <SearchLocation
             size={this.props.size}
           />
         </Button>

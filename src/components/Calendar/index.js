@@ -34,7 +34,7 @@ class Calendar extends Component {
     };
 
     const maxHue = 120;
-    const color = `hsl(${event.viability * maxHue}, 60%, 45%)`;
+    const color = `hsl(${event.viability * maxHue}, 70%, 45%)`;
 
     if (event.viability === 0) {
       config.className = 'inviable';
@@ -94,6 +94,7 @@ class Calendar extends Component {
           defaultView={'week'}
           views={['week', 'day']}
           eventPropGetter={this.determineColorClass}
+          // style={{display: "none"}}
         />
       </div>
     );
