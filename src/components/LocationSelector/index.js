@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Input } from 'reactstrap';
 import { connect } from 'react-redux'
+
+import { ListGroup, ListGroupItem, Input } from 'reactstrap';
+import {
+  InputGroup,
+  Button,
+  Icon,
+  Intent,
+  Menu,
+  MenuItem,
+  Classes,
+} from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -22,22 +34,32 @@ class LocationSelector extends Component {
     // if (suggestions.length > 0) console.log(getSuggestionItemProps(suggestions[0]));
     return (
       <div className="autocomplete-root">
-        <Input {...getInputProps()} />
+        {/* <Input {...getInputProps()} /> */}
+        <InputGroup
+          {...getInputProps()}
+          placeholder="Type Location..."
+          large
+          icon="search"
+          rightElement={
+            <Button>
+              <Icon icon={IconNames.GEOLOCATION} intent={Intent.PRIMARY} />
+            </Button>
+          }
+        />
         <div className="autocomplete-dropdown-container">
           {loading && <div>Loading...</div>}
-          <ListGroup>
+          <Menu className={Classes.ELEVATION_1}>
             {suggestions.map(suggestion => (
-              <ListGroupItem
+              <MenuItem
                 {...getSuggestionItemProps(suggestion)}
                 tag="a"
                 href="#"
                 action
                 active={suggestion.active}
-              >
-                {suggestion.description}
-              </ListGroupItem>
+                text={suggestion.description}
+              />
             ))}
-          </ListGroup>
+          </Menu>
         </div>
       </div>
     );
@@ -53,7 +75,7 @@ class LocationSelector extends Component {
   handleSelect = address => {
     // Quickly set address in state to the returned value,
     // until the result from the call below, then dispatch action.
-    
+
     this.setState({
       ...this.state,
       address,
