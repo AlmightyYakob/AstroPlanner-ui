@@ -12,9 +12,12 @@ moment.updateLocale('en', {
     dow: moment().day(),
   },
 });
-const localizer = BigCalendar.momentLocalizer(moment);
-const BACKEND_API_URL = 'https://jakenesbitt.com/astroplanner/api/';
+
 const ONE_HOUR_SECONDS = 3600;
+const localizer = BigCalendar.momentLocalizer(moment);
+const BACKEND_API_URL = process.env.NODE_ENV === 'production'
+? 'https://jakenesbitt.com/astroplanner/api/'
+: 'http://localhost:8000';
 
 class Calendar extends Component {
   constructor(props) {
